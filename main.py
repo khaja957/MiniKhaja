@@ -2,13 +2,15 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
-from desktop.desktop_window import DesktopPetWindow
+from desktop.desktop_window import DesktopWindow
 
 
 def main():
+
     app = QApplication(sys.argv)
 
-    window = DesktopPetWindow()
+    window = DesktopWindow()
+
     window.show()
 
     sys.exit(app.exec())
@@ -16,4 +18,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    

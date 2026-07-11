@@ -2,20 +2,24 @@ from pathlib import Path
 
 from PySide6.QtGui import QPixmap
 
+from core.config import SPRITES_DIR
+
 
 class SpriteLoader:
+    """
+    Loads animation frames from disk.
+    """
 
-    def __init__(self, asset_root):
+    def load(self, animation_name: str) -> list[QPixmap]:
 
-        self.asset_root = Path(asset_root)
+        folder = SPRITES_DIR / animation_name
 
-    def load_animation(self, animation_name):
-
-        folder = self.asset_root / animation_name
+        if not folder.exists():
+            raise FileNotFoundError(folder)
 
         frames = []
 
-        for file in sorted(folder.glob("*.png")):
-            frames.append(QPixmap(str(file)))
+        for image in sorted(folder.glob("*.png")):
+            frames.append(QPixmap(str(image)))
 
         return frames

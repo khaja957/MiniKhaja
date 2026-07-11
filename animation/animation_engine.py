@@ -1,5 +1,7 @@
 from PySide6.QtCore import QObject, QTimer, Signal
 
+from core.config import DEFAULT_FPS
+
 
 class AnimationEngine(QObject):
 
@@ -11,31 +13,36 @@ class AnimationEngine(QObject):
 
         self.frames = []
 
-        self.index = 0
+        self.current_index = 0
 
         self.timer = QTimer()
 
         self.timer.timeout.connect(self.next_frame)
 
-    def set_animation(self, frames, fps=8):
+    def play(self, frames, fps=DEFAULT_FPS):
 
         self.frames = frames
 
-        self.index = 0
+        self.current_index = 0
 
-        if frames:
-
-            self.frame_changed.emit(frames[0])
+        if self.frames:
+            self.frame_changed.emit(self.frames[0])
 
         self.timer.start(1000 // fps)
+
+    def stop(self):
+
+        self.timer.stop()
 
     def next_frame(self):
 
         if not self.frames:
             return
 
-        self.index = (self.index + 1) % len(self.frames)
+        self.current_index += 1
+
+        self.current_index %= len(self.frames)
 
         self.frame_changed.emit(
-            self.frames[self.index]
+            self.frames[self.current_index]
         )

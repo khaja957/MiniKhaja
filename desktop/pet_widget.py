@@ -1,5 +1,7 @@
-from PySide6.QtWidgets import QLabel
 from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QLabel
+
+from core.config import WINDOW_WIDTH, WINDOW_HEIGHT
 
 
 class PetWidget(QLabel):
@@ -8,10 +10,15 @@ class PetWidget(QLabel):
 
         super().__init__()
 
-        self.setAttribute(
-            Qt.WA_TranslucentBackground
+        self.setFixedSize(
+            WINDOW_WIDTH,
+            WINDOW_HEIGHT
         )
 
         self.setScaledContents(True)
 
-        self.resize(180, 180)
+        self.setAlignment(Qt.AlignCenter)
+
+    def show_frame(self, pixmap):
+
+        self.setPixmap(pixmap)
