@@ -9,7 +9,8 @@ from studio.widgets.toolbar import Toolbar
 from studio.widgets.prompt_panel import PromptPanel
 from studio.widgets.preview_panel import PreviewPanel
 from studio.widgets.status_bar import StudioStatusBar
-
+from character.registry import CharacterRegistry
+from studio.prompt_builder import PromptBuilder
 
 class StudioWindow(QMainWindow):
 
@@ -32,6 +33,17 @@ class StudioWindow(QMainWindow):
 
         self.prompt_panel = PromptPanel()
         self.preview_panel = PreviewPanel()
+
+        # Load Mini Khaja profile
+        profile = CharacterRegistry.get("mini_khaja")
+
+        # Build the prompt
+        builder = PromptBuilder(profile)
+
+        prompt = builder.build_idle_prompt()
+
+        # Show it in the UI
+        self.prompt_panel.set_prompt(prompt)
 
         content.addWidget(self.prompt_panel, 1)
         content.addWidget(self.preview_panel, 2)

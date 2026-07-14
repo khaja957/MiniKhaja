@@ -11,11 +11,10 @@ class PromptPanel(QWidget):
         layout.addWidget(QLabel("Prompt Preview"))
 
         self.text = QTextEdit()
-
         self.text.setReadOnly(True)
 
-        self.text.setPlainText(
-            "Prompt will appear here..."
-        )
-
         layout.addWidget(self.text)
+
+    def set_prompt(self, prompt: str):
+        """Display the generated prompt."""
+        self.text.setPlainText(prompt)
