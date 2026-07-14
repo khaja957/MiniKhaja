@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout
 from PySide6.QtGui import QGuiApplication
 from pet.pet import Pet
 from desktop.pet_widget import PetWidget
+from scheduler.pet_scheduler import PetScheduler
 
 
 class DesktopWindow(QWidget):
@@ -33,6 +34,7 @@ class DesktopWindow(QWidget):
 
         # Create Engines
         self.pet = Pet()
+        self.scheduler = PetScheduler(self.pet, self)
 
         # Connect Signals
         self.pet.frame_changed.connect(
@@ -57,7 +59,7 @@ class DesktopWindow(QWidget):
         self.move(x, y)
 
         # Temporary Tests
-        QTimer.singleShot(2000, self.test_walk)
+        #QTimer.singleShot(2000, self.test_walk)
 
     def update_position(self, point: QPoint):
         """Move the desktop window to the new position."""

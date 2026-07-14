@@ -25,6 +25,7 @@ class Pet(QObject):
         self.animation = AnimationEngine()
         self.movement = MovementEngine()
         self.direction = Direction.RIGHT
+        self.walk_behavior = WalkBehavior(self)
 
         # State
         self.state = PetState.IDLE
