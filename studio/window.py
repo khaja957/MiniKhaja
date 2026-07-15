@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 )
 
 from studio.widgets.toolbar import Toolbar
+from studio.asset_pipeline import AssetPipeline
 from studio.widgets.prompt_panel import PromptPanel
 from studio.widgets.preview_panel import PreviewPanel
 from studio.widgets.status_bar import StudioStatusBar
@@ -34,6 +35,8 @@ class StudioWindow(QMainWindow):
         self.prompt_panel = PromptPanel()
         self.preview_panel = PreviewPanel()
 
+        self.toolbar.generate.clicked.connect(self.generate_asset)
+
         # Load Mini Khaja profile
         profile = CharacterRegistry.get("mini_khaja")
 
@@ -51,3 +54,21 @@ class StudioWindow(QMainWindow):
         main_layout.addWidget(self.toolbar)
         main_layout.addLayout(content)
         main_layout.addWidget(self.status)
+    
+    def generate_asset(self):
+
+        self.status.set_status("Generating...")
+
+        profile = CharacterRegistry.get("mini_khaja")
+
+        builder = PromptBuilder(profile)
+
+        prompt = builder.build_idle_prompt()
+
+        pipeline = AssetPipeline()
+
+        asset = pipeline.generate(name=profile.name, prompt=prompt)
+
+        self.preview_panel.show_image(asset.file_path)
+
+        self.status.set_status("Generation Complete")

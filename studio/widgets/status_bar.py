@@ -7,3 +7,6 @@ class StudioStatusBar(QLabel):
         super().__init__()
 
         self.setText("Ready")
+    
+    def set_status(self, text: str):
+        self.setText(text)        
