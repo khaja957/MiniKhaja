@@ -12,6 +12,7 @@ from studio.widgets.preview_panel import PreviewPanel
 from studio.widgets.status_bar import StudioStatusBar
 from character.registry import CharacterRegistry
 from studio.prompt_builder import PromptBuilder
+from studio.widgets.asset_browser import AssetBrowser
 
 class StudioWindow(QMainWindow):
 
@@ -29,6 +30,7 @@ class StudioWindow(QMainWindow):
 
         self.toolbar = Toolbar()
         self.status = StudioStatusBar()
+        self.asset_browser = AssetBrowser()
 
         content = QHBoxLayout()
 
@@ -36,6 +38,8 @@ class StudioWindow(QMainWindow):
         self.preview_panel = PreviewPanel()
 
         self.toolbar.generate.clicked.connect(self.generate_asset)
+        self.asset_browser.asset_selected.connect(self.preview_panel.show_image)
+        self.toolbar.refresh.clicked.connect(self.asset_browser.refresh)
 
         # Load Mini Khaja profile
         profile = CharacterRegistry.get("mini_khaja")
@@ -50,6 +54,7 @@ class StudioWindow(QMainWindow):
 
         content.addWidget(self.prompt_panel, 1)
         content.addWidget(self.preview_panel, 2)
+        content.addWidget(self.asset_browser, 1)
 
         main_layout.addWidget(self.toolbar)
         main_layout.addLayout(content)

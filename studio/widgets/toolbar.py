@@ -26,3 +26,6 @@ class Toolbar(QWidget):
         self.generate = QPushButton("Generate")
 
         layout.addWidget(self.generate)
+        
+        self.refresh = QPushButton("Refresh")
+        layout.addWidget(self.refresh)
