@@ -2,7 +2,7 @@ from pathlib import Path
 
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QListWidget, QVBoxLayout, QWidget
-
+from studio.settings import StudioSettings
 
 class AssetBrowser(QWidget):
 
@@ -11,7 +11,7 @@ class AssetBrowser(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.assets_dir = Path("assets/source/images")
+        self.assets_dir = StudioSettings.SOURCE_IMAGES
 
         layout = QVBoxLayout(self)
 

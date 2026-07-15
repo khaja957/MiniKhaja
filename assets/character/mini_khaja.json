@@ -1,0 +1,27 @@
+{
+    "name": "Mini Khaja",
+    "appearance": {
+        "hair": "short black hair",
+        "beard": "trimmed beard",
+        "hoodie": "blue hoodie",
+        "pants": "dark jeans",
+        "shoes": "white sneakers",
+        "eye_color": "brown",
+        "skin_tone": "medium"
+    },
+    "personality": {
+        "friendliness": 0.95,
+        "curiosity": 0.85,
+        "energy": 0.75,
+        "humor": 0.9,
+        "patience": 0.95
+    },
+    "animations": {
+        "idle": "idle",
+        "walk": "walk",
+        "wave": "wave",
+        "talk": "talk",
+        "drink": "drink",
+        "sleep": "sleep"
+    }
+}

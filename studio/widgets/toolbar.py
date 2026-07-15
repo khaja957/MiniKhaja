@@ -29,3 +29,6 @@ class Toolbar(QWidget):
         
         self.refresh = QPushButton("Refresh")
         layout.addWidget(self.refresh)
+
+        self.lock_character = QPushButton("🔒 Lock Character")
+        layout.addWidget(self.lock_character)

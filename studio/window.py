@@ -13,6 +13,7 @@ from studio.widgets.status_bar import StudioStatusBar
 from character.registry import CharacterRegistry
 from studio.prompt_builder import PromptBuilder
 from studio.widgets.asset_browser import AssetBrowser
+from character.character_manager import CharacterManager
 
 class StudioWindow(QMainWindow):
 
@@ -38,6 +39,7 @@ class StudioWindow(QMainWindow):
         self.preview_panel = PreviewPanel()
 
         self.toolbar.generate.clicked.connect(self.generate_asset)
+        self.toolbar.lock_character.clicked.connect(self.lock_character)
         self.asset_browser.asset_selected.connect(self.preview_panel.show_image)
         self.toolbar.refresh.clicked.connect(self.asset_browser.refresh)
 
@@ -77,3 +79,9 @@ class StudioWindow(QMainWindow):
         self.preview_panel.show_image(asset.file_path)
 
         self.status.set_status("Generation Complete")
+
+    def lock_character(self):
+
+        CharacterManager.lock("mini_khaja")
+
+        self.status.set_status("Character locked successfully.")

@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from .base_generator import BaseGenerator
+from studio.settings import StudioSettings
 
 
 class PlaceholderGenerator(BaseGenerator):
@@ -11,6 +12,6 @@ class PlaceholderGenerator(BaseGenerator):
 
         print(prompt)
 
-        placeholder = Path("studio/resources/placeholder.png")
+        placeholder = StudioSettings.PLACEHOLDER
 
         return placeholder
