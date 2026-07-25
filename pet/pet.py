@@ -1,7 +1,7 @@
 from PySide6.QtCore import QObject, QPoint, Signal
 
 from animation.animation_engine import AnimationEngine
-from animation.sprite_loader import SpriteLoader
+from animation.loader import SpriteLoader
 from movement.movement_engine import MovementEngine
 from pet.direction import Direction
 from pet.state import PetState

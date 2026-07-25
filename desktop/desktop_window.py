@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout
 from PySide6.QtGui import QGuiApplication
 from pet.pet import Pet
 from desktop.pet_widget import PetWidget
-from scheduler.pet_scheduler import PetScheduler
+from scheduler.scheduler import PetScheduler
 
 
 class DesktopWindow(QWidget):

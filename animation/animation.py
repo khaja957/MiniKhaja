@@ -1,27 +1,19 @@
-from pathlib import Path
+from dataclasses import dataclass
+
 from PySide6.QtGui import QPixmap
 
 
+@dataclass
 class Animation:
 
-    def __init__(self, folder, fps=30, loop=True):
+    name: str
 
-        self.folder = Path(folder)
-        self.fps = fps
-        self.loop = loop
+    fps: float
 
-        self.frames = []
+    frames: list[QPixmap]
 
-        self.load()
+    frame_count: int
 
-    def load(self):
+    width: int
 
-        files = sorted(self.folder.glob("*.png"))
-
-        for file in files:
-            self.frames.append(QPixmap(str(file)))
-
-    @property
-    def frame_count(self):
-
-        return len(self.frames)
+    height: int

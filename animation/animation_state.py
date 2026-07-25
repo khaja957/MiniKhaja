@@ -16,3 +16,5 @@ class AnimationState(Enum):
     WAVE = "wave"
 
     SLEEP = "sleep"
+
+    RUN = "run"

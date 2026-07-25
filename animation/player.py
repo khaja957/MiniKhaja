@@ -1,33 +1,44 @@
 from PySide6.QtCore import QObject, QTimer, Qt
-
+from PySide6.QtGui import QPixmap
+from config.settings import SPRITE_SCALE
 
 class AnimationPlayer(QObject):
 
-    def __init__(self, pixmap_item):
+    def __init__(self, window):
 
         super().__init__()
 
-        self.pixmap_item = pixmap_item
+        # Window
+        self.window = window
 
+        # Sprite renderer (QGraphicsPixmapItem)
+        self.sprite = window.sprite
+
+        # Current animation
         self.animation = None
 
+        # Current frame index
         self.current_frame = 0
 
-        self.scale = 0.45
-
+        # Playback timer
         self.timer = QTimer()
 
         self.timer.timeout.connect(self.next_frame)
 
-        self.window_fitted = False
+    # ---------------------------------------------------------
 
     def play(self, animation):
+
+        if animation is None:
+            return
+
+        # Avoid restarting the same animation
+        #if self.animation == animation:
+         #   return
 
         self.animation = animation
 
         self.current_frame = 0
-
-        self.window_fitted = False
 
         interval = int(1000 / animation.fps)
 
@@ -35,47 +46,46 @@ class AnimationPlayer(QObject):
 
         self.next_frame()
 
+    # ---------------------------------------------------------
+
+    def stop(self):
+
+        self.timer.stop()
+
+        self.animation = None
+
+        self.current_frame = 0
+
+    # ---------------------------------------------------------
+
     def next_frame(self):
 
         if self.animation is None:
             return
 
-        if self.current_frame >= self.animation.frame_count:
-
-            if self.animation.loop:
-                self.current_frame = 0
-            else:
-                self.timer.stop()
-                return
+        if len(self.animation.frames) == 0:
+            return
 
         pixmap = self.animation.frames[self.current_frame]
 
-        scaled = pixmap.scaled(
+        if pixmap.isNull():
+            return        
 
-            int(pixmap.width() * self.scale),
+        scaled = pixmap.scaled(int(pixmap.width() * SPRITE_SCALE), int(pixmap.height() * SPRITE_SCALE),  Qt.KeepAspectRatio,  Qt.SmoothTransformation,)
 
-            int(pixmap.height() * self.scale),
+        self.sprite.setPixmap(scaled)
 
-            Qt.KeepAspectRatio,
+        #self.sprite.setPixmap(pixmap)
 
-            Qt.SmoothTransformation
-
-        )
-
-        self.pixmap_item.setPixmap(scaled)
-
-        scene = self.pixmap_item.scene()
-
-        scene.setSceneRect(self.pixmap_item.boundingRect())
-
-        if not self.window_fitted:
-
-            view = scene.views()[0]
-
-            window = view.window()
-
-            window.fit_to_pixmap()
-
-            self.window_fitted = True
+        self.window.fit_to_pixmap()
 
         self.current_frame += 1
+
+        if self.current_frame >= len(self.animation.frames):
+            self.current_frame = 0
+
+    # ---------------------------------------------------------
+
+    def is_playing(self):
+
+        return self.timer.isActive()
