@@ -4,7 +4,7 @@ WINDOW_ALWAYS_ON_TOP = True
 
 # Rendering
 
-SPRITE_SCALE = 0.25
+SPRITE_SCALE = 0.5
 
 SMOOTH_SCALING = True
 

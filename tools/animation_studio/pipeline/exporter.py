@@ -1,9 +1,18 @@
 from pathlib import Path
-
+import json
 import cv2
 
 from pipeline.stage import PipelineStage
 from models.animation_asset import AnimationAsset
+
+
+LOOPING_ANIMATIONS = {
+    "Idle",
+    "Idle_at_wall",
+    "Walk",
+    "Run",
+    "Sleep"
+}
 
 
 class ExportStage(PipelineStage):
@@ -21,23 +30,32 @@ class ExportStage(PipelineStage):
             f"Exporting frames to: {project.output_folder}"
         )
 
+    # ----------------------------------------------------------
+
     def process(self, context):
 
         project = context.project
 
-        asset = AnimationAsset(
+        asset = AnimationAsset()
 
-            name=project.video_path.stem,
+        asset.name = project.video_path.stem
 
-            fps=project.fps,
+        asset.fps = project.fps
 
-            frame_count=len(project.frames),
+        asset.frame_count = len(project.frames)
 
-            canvas_width=project.normalized_width,
+        asset.canvas_width = project.normalized_width
 
-            canvas_height=project.normalized_height
+        asset.canvas_height = project.normalized_height
 
-        )
+        asset.loop = asset.name in LOOPING_ANIMATIONS
+
+        #
+        # Bottom-center pivot
+        #
+        asset.pivot_x = asset.canvas_width // 2
+
+        asset.pivot_y = asset.canvas_height - 1
 
         total = len(project.frames)
 
@@ -46,37 +64,88 @@ class ExportStage(PipelineStage):
             if context.cancelled:
                 return
 
-            filename = (
-                project.output_folder /
-                f"{index:04d}.png"
-            )
+            filename = f"{index:04d}.png"
+
+            filepath = project.output_folder / filename
 
             success = cv2.imwrite(
-                str(filename),
-                frame,
+                str(filepath),
+                frame
             )
 
             if not success:
 
                 raise RuntimeError(
-
-                    f"Failed to export {filename}"
-
+                    f"Failed to export {filepath}"
                 )
 
-            asset.frame_paths.append(filename)
+            #
+            # Store only filename
+            #
+            asset.frames.append(filename)
 
             context.report(
-
                 "Export",
-
                 index + 1,
-
                 total
-
             )
 
+        #
+        # Save asset in project
+        #
         project.asset = asset
+
+        #
+        # Generate metadata
+        #
+        metadata = {
+
+            "name": asset.name,
+
+            "fps": asset.fps,
+
+            "loop": asset.loop,
+
+            "frame_count": asset.frame_count,
+
+            "canvas": {
+
+                "width": asset.canvas_width,
+
+                "height": asset.canvas_height
+
+            },
+
+            "pivot": {
+
+                "x": asset.pivot_x,
+
+                "y": asset.pivot_y
+
+            },
+
+            "frames": asset.frames
+
+        }
+
+        metadata_file = (
+            project.output_folder /
+            "metadata.json"
+        )
+
+        with open(
+            metadata_file,
+            "w",
+            encoding="utf-8"
+        ) as f:
+
+            json.dump(
+                metadata,
+                f,
+                indent=4
+            )
+
+    # ----------------------------------------------------------
 
     def end(self, context):
 
@@ -96,3 +165,12 @@ class ExportStage(PipelineStage):
             f"{asset.canvas_height}"
         )
 
+        print(
+            f"Pivot  : "
+            f"({asset.pivot_x}, "
+            f"{asset.pivot_y})"
+        )
+
+        print(
+            f"Loop   : {asset.loop}"
+        )

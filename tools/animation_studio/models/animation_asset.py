@@ -1,19 +1,27 @@
 from dataclasses import dataclass, field
-from pathlib import Path
 
 
 @dataclass
 class AnimationAsset:
 
-    name: str
+    # Animation information
+    name: str = ""
 
-    fps: float
+    fps: float = 24.0
 
-    frame_count: int
+    loop: bool = True
 
-    canvas_width: int
+    frame_count: int = 0
 
-    canvas_height: int
+    # Canvas
+    canvas_width: int = 0
 
+    canvas_height: int = 0
 
-    frame_paths: list[Path] = field(default_factory=list)
+    # Pivot
+    pivot_x: int = 0
+
+    pivot_y: int = 0
+
+    # Frame filenames
+    frames: list[str] = field(default_factory=list)
