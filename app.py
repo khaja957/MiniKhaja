@@ -12,7 +12,7 @@ app = QApplication(sys.argv)
 
 window = CompanionWindow()
 
-idle = Animation("assets/idle", fps=30)
+idle = Animation("tools/animation_studio/output", fps=30)
 
 player = AnimationPlayer(window.pixmap)
 
